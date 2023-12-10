@@ -21,18 +21,16 @@
                     { "green", 13 }
                 };
 
-                var splitInTwo = line.Split(":");
-                var id = int.Parse(splitInTwo[0].Split(" ")[1]);
-
-                var bagContents = splitInTwo[1].TrimStart();
-
+                var idAndGame = line.Split(":");
+                var gameId = int.Parse(idAndGame[0].Split(" ")[1]);
+                var bagContents = idAndGame[1].TrimStart();
                 bagContents = bagContents.Replace(",", ";");
                 var games = bagContents.Split(";");
 
-                var contentWithNumbers = games.Select(game => game.Trim().Split(" ")).ToList();
+                var gamesWithCounts = games.Select(game => game.Trim().Split(" ")).ToList();
 
-                if (contentWithNumbers.All(x => int.Parse(x[0]) <= colours[x[1]]))
-                    sum += id;
+                if (gamesWithCounts.All(x => int.Parse(x[0]) <= colours[x[1]]))
+                    sum += gameId;
             }
 
             return sum.ToString();
@@ -57,17 +55,14 @@
                     { "green", 13 }
                 };
 
-                var splitInTwo = line.Split(":");
-                var id = int.Parse(splitInTwo[0].Split(" ")[1]);
-
-                var bagContents = splitInTwo[1].TrimStart();
-
+                var idAndGame = line.Split(":");
+                var bagContents = idAndGame[1].TrimStart();
                 bagContents = bagContents.Replace(",", ";");
                 var games = bagContents.Split(";");
 
-                var contentWithNumbers = games.Select(game => game.Trim().Split(" ")).ToList();
+                var gamesWithCounts = games.Select(game => game.Trim().Split(" ")).ToList();
 
-                foreach (var item in contentWithNumbers)
+                foreach (var item in gamesWithCounts)
                 {
                     var count = int.Parse(item[0]);
                     var colour = item[1];
