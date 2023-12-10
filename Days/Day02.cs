@@ -15,14 +15,12 @@
         {
             _input = File.ReadLines(InputFilePath)
                 .Select(x => x.Split(": "))
-                .Select(
-                    x =>
+                .Select(x =>
                         new ElfGame
                         {
                             GameId = int.Parse(x[0].Split(" ")[1]),
                             Contents = x[1].Replace(",", ";").Split("; ")
-                        }
-                )
+                        })
                 .ToList();
         }
 
@@ -31,9 +29,7 @@
             var sum = 0;
             foreach (var game in _input)
             {
-                if (
-                    game.Contents!.All(x => int.Parse(x.Split(" ")[0]) <= _colours[x.Split(" ")[1]])
-                )
+                if (game.Contents!.All(x => int.Parse(x.Split(" ")[0]) <= _colours[x.Split(" ")[1]]))
                     sum += game.GameId;
             }
 
