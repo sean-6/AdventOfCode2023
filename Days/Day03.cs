@@ -2,51 +2,59 @@
 {
     public class Day03 : BaseDay
     {
-        private readonly string[] _input;
+        private readonly char[][] _input;
 
         public Day03()
         {
-            _input = File.ReadAllLines(InputFilePath);
+            _input = File.ReadAllLines(InputFilePath).Select(x => x.ToCharArray()).ToArray();
         }
+
+        public bool IsValidCoordinate(int x, int y, int rowLength, int arrayLength) => x >= 0 && y >= 0 && y < rowLength && x < arrayLength;
 
         public override string Solve1()
         {
-            // Add up all the part numbers to see what is missing
-            // Numbers adjacent, even diagnoally are part numbers, anything except '.' is a part number
-
-            var sum = 0;
-            // Iterate Lines
+            var numbers = new List<int>();
             for (var i = 0; i < _input.Length; i++)
             {
-                var line = _input[i];
-
-                //Iterate chars
+                var number = 0;
+                var hasAdjacentSymbol = false;
                 for (var j = 0; j < _input[i].Length; j++)
                 {
-                    var character = line[j];
+                    var character = _input[i][j];
+                    var isDigit = char.IsDigit(character);
+                    if (isDigit)
+                    {
+                        var digit = character - '0';
+                        number *= 10;
+                        number += digit;
 
-                    if (character.Equals('.') || char.IsDigit(character))
-                        continue;
+                        hasAdjacentSymbol = hasAdjacentSymbol || IsSymbolAdjacent(i, j, _input);
+                    }
 
-                    //top left
+                    if (j == _input.Length - 1 || !isDigit)
+                    {
+                        if (hasAdjacentSymbol)
+                        {
+                            numbers.Add(number);
+                        }
 
-                    //top
-
-                    // top right
-
-                    //left
-
-                    //right
-
-                    // bottom left
-
-                    //bottom
-
-                    //bottom right
+                        hasAdjacentSymbol = false;
+                        number = 0;
+                    }
                 }
             }
 
-            return sum.ToString();
+            return numbers.Sum().ToString();
+        }
+
+        private bool IsSymbolAdjacent(int x, int y, char[][] input)
+        {
+            var offsets = new List<(int X, int Y)>
+            {
+                (x - 1, y - 1), (x - 1, y), (x - 1, y + 1), (x, y - 1), (x, y + 1), (x + 1, y - 1), (x + 1, y), (x + 1, y + 1)
+            };
+
+            return offsets.Where(coordinate => IsValidCoordinate(coordinate.X, coordinate.Y, input[x].Length, input[y].Length)).Any(coordinate => _input[coordinate.X][coordinate.Y] != '.' && !char.IsDigit(_input[coordinate.X][coordinate.Y]));
         }
 
         public override string Solve2()
