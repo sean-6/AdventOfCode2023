@@ -2,7 +2,7 @@
 {
     public class Day01 : BaseDay
     {
-        private IEnumerable<string> _input;
+        private readonly IEnumerable<string> _input;
 
         private Dictionary<string, int> _mappedNumbers = new Dictionary<string, int>
         {
